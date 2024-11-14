@@ -13,8 +13,11 @@ Auctioneer::Auctioneer() : Node("auctioneer")
 
 void Auctioneer::NewTaskCallback(std::unique_ptr<task_auction::msg::Task, std::default_delete<task_auction::msg::Task>> msg)
 {
-    // New task received, so start a new auction
-    auctions[msg->id] = {};
+    auto timer = this->create_wall_timer(auctionDuration, std::bind(&Auctioneer::BidCompleteTimerCallback, this));
+    Auction auction(msg->id, timer);
+    auctions[msg->id] = auction;
+
+    // Notify clients of auction
     auto newTaskMsg = task_auction::msg::Task();
     newTaskMsg.id = msg->id;
     newTaskMsg.description = msg->description;
@@ -30,10 +33,15 @@ void Auctioneer::BidCallback(std::unique_ptr<task_auction::msg::Bid, std::defaul
         bid.task_id = msg->task_id;
         bid.robot_id = msg->robot_id;
         bid.bid_value = msg->bid_value;
-        auctions[msg->task_id].push_back(bid);
+        auctions[msg->task_id].addBid(bid);
     }
     else
     {
-        RCLCPP_WARN(this->get_logger(), "Recevied bid for inactive auction: '%d' from client %d", msg->task_id, msg->robot_id);
+        RCLCPP_WARN(this->get_logger(), "Recevied bid for inactive auction: '%ld' from client %ld", msg->task_id, msg->robot_id);
     }
+}
+
+void Auctioneer::BidCompleteTimerCallback()
+{
+  //TODO: How do we link this its auction??
 }

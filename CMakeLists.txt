@@ -24,7 +24,7 @@ ament_export_dependencies(rosidl_default_runtime)
 # include directories
 include_directories(include)
 
-add_executable(auctioneer nodes/auctioneer_node.cpp include/constants.hpp include/auctioneer.hpp src/auctioneer.cpp)
+add_executable(auctioneer nodes/auctioneer_node.cpp include/constants.hpp include/auction.hpp src/auction.cpp include/auctioneer.hpp src/auctioneer.cpp)
 ament_target_dependencies(auctioneer rclcpp)
 
 rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} rosidl_typesupport_cpp)
