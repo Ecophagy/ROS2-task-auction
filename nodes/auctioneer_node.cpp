@@ -1,9 +1,10 @@
 #include "rclcpp/rclcpp.hpp"
+#include "auctioneer.hpp"
 
 int main(int argc, char* argv[])
 {
     rclcpp::init(argc, argv);
-    // Todo spin on auctioneer class
+    rclcpp::spin(std::make_shared<Auctioneer>());
     rclcpp::shutdown();
     return 0;
 }
