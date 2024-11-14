@@ -9,7 +9,10 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 
-add_executable(auctioneer nodes/auctioneer.cpp)
+# include directories
+include_directories(include)
+
+add_executable(auctioneer nodes/auctioneer_node.cpp include/auctioneer.hpp src/auctioneer.cpp)
 ament_target_dependencies(auctioneer rclcpp)
 
 install(TARGETS
