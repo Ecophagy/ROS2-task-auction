@@ -13,7 +13,9 @@ private:
     std::map<int, std::vector<task_auction::msg::Bid>> auctions;
 
     void NewTaskCallback(std::unique_ptr<task_auction::msg::Task, std::default_delete<task_auction::msg::Task>> msg);
+    void BidCallback(std::unique_ptr<task_auction::msg::Bid, std::default_delete<task_auction::msg::Bid>> msg);
 
     rclcpp::Subscription<task_auction::msg::Task>::SharedPtr newTaskSubscriber;
     rclcpp::Publisher<task_auction::msg::Task>::SharedPtr auctionPublisher;
+    rclcpp::Subscription<task_auction::msg::Bid>::SharedPtr bidSubscriber;
 };
