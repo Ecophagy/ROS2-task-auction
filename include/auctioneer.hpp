@@ -8,4 +8,5 @@ public:
 
 private:
     rclcpp::Subscription<task_auction::msg::Task>::SharedPtr newTaskSubscriber;
+    rclcpp::Publisher<task_auction::msg::Task>::SharedPtr auctionPublisher;
 };
