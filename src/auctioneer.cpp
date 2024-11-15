@@ -13,8 +13,7 @@ Auctioneer::Auctioneer() : Node("auctioneer")
 
 void Auctioneer::NewTaskCallback(std::unique_ptr<task_auction::msg::Task, std::default_delete<task_auction::msg::Task>> msg)
 {
-    auto timer = this->create_wall_timer(auctionDuration, std::bind(&Auctioneer::BidCompleteTimerCallback, this));
-    Auction auction(msg->id, timer);
+    Auction auction(msg->id);
     auctions[msg->id] = auction;
 
     // Notify clients of auction
@@ -39,9 +38,4 @@ void Auctioneer::BidCallback(std::unique_ptr<task_auction::msg::Bid, std::defaul
     {
         RCLCPP_WARN(this->get_logger(), "Recevied bid for inactive auction: '%ld' from client %ld", msg->task_id, msg->robot_id);
     }
-}
-
-void Auctioneer::BidCompleteTimerCallback()
-{
-  //TODO: How do we link this its auction??
 }

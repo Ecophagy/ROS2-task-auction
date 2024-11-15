@@ -1,6 +1,6 @@
 #include "auction.hpp"
 
-Auction::Auction(int taskId, rclcpp::TimerBase::SharedPtr auctionTimer) : taskId(taskId), auctionTimer(auctionTimer)
+Auction::Auction(int taskId) : taskId(taskId)
 {
     bids = {};
 }
