@@ -9,6 +9,7 @@ public:
     Auction() = default;
     Auction(int taskId);
     void addBid(task_auction::msg::Bid);
+    int getNumberOfBids();
     task_auction::msg::Bid getWinningBid();
 
 private:
