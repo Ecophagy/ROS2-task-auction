@@ -27,11 +27,16 @@ include_directories(include)
 add_executable(auctioneer nodes/auctioneer_node.cpp include/constants.hpp include/auction.hpp src/auction.cpp include/auctioneer.hpp src/auctioneer.cpp)
 ament_target_dependencies(auctioneer rclcpp)
 
+add_executable(auctionClient nodes/auction_client_node.cpp include/constants.hpp include/auctionClient.hpp src/auctionClient.cpp)
+ament_target_dependencies(auctionClient rclcpp)
+
 rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} rosidl_typesupport_cpp)
 target_link_libraries(auctioneer "${cpp_typesupport_target}")
+target_link_libraries(auctionClient "${cpp_typesupport_target}")
 
 install(TARGETS
 	auctioneer
+  auctionClient
 	DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
