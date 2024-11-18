@@ -3,8 +3,10 @@
 #include <functional>
 
 
-AuctionClient::AuctionClient(int robotId) : Node ("auctionClient"), robotId(robotId)
+AuctionClient::AuctionClient() : Node ("auctionClient")
 {
+    this->declare_parameter(Parameters::robotId, 0);
+    robotId = this->get_parameter(Parameters::robotId).as_int();
     bidPublisher = this->create_publisher<task_auction::msg::Bid>(Topics::auctionBids, 1);
     auctionSubscriber = this->create_subscription<task_auction::msg::Task>(Topics::auctions, 10, std::bind(&AuctionClient::AuctionCallback, this, std::placeholders::_1));
 }

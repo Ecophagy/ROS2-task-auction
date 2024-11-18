@@ -7,3 +7,8 @@ namespace Topics
     const std::string auctionBids = "auctions/bids";
     const std::string auctionWinner = "auctions/winner";
 }
+
+namespace Parameters
+{
+    const std::string robotId = "robot_id";
+}

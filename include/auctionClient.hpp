@@ -5,10 +5,10 @@
 class AuctionClient : public rclcpp::Node
 {
 public:
-    AuctionClient(int robotId);
+    AuctionClient();
 
 private:
-    const int robotId;
+    int robotId;
     rclcpp::Subscription<task_auction::msg::Task>::SharedPtr auctionSubscriber;
     rclcpp::Publisher<task_auction::msg::Bid>::SharedPtr bidPublisher;
     void AuctionCallback(std::unique_ptr<task_auction::msg::Task, std::default_delete<task_auction::msg::Task>> msg);
