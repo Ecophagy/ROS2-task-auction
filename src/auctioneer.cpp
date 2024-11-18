@@ -15,6 +15,7 @@ Auctioneer::Auctioneer() : Node("auctioneer")
 
 void Auctioneer::NewTaskCallback(std::unique_ptr<task_auction::msg::Task, std::default_delete<task_auction::msg::Task>> msg)
 {
+    RCLCPP_INFO(this->get_logger(), "Creating new auction for task %ld", msg->id);
     Auction auction(msg->id);
     auctions[msg->id] = auction;
 
@@ -30,6 +31,7 @@ void Auctioneer::BidCallback(std::unique_ptr<task_auction::msg::Bid, std::defaul
     // Is the auction active?
     if(auctions.find(msg->task_id) != auctions.end())
     {
+        RCLCPP_INFO(this->get_logger(), "Bid for task %ld received from robot #%ld for %ld", msg->task_id, msg->robot_id, msg->bid_value);
         auto bid = task_auction::msg::Bid();
         bid.task_id = msg->task_id;
         bid.robot_id = msg->robot_id;
@@ -40,6 +42,7 @@ void Auctioneer::BidCallback(std::unique_ptr<task_auction::msg::Bid, std::defaul
         if(auctions[msg->task_id].getNumberOfBids() == numberOfClients)
         {
             auto winningBid = auctions[msg->task_id].getWinningBid();
+            RCLCPP_INFO(this->get_logger(), "Winning bid for task %ld is %ld by robot #%ld", msg->task_id, winningBid.bid_value, winningBid.robot_id);
             winningBidPublisher->publish(winningBid); // TODO: This should be a service not a topic
             auctions.erase(msg->task_id);
         }

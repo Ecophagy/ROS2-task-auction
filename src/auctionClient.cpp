@@ -17,5 +17,7 @@ void AuctionClient::AuctionCallback(std::unique_ptr<task_auction::msg::Task, std
     bid.task_id = msg->id;
     bid.robot_id = robotId;
     // TODO: Caluculate and assign bid value
+    bid.bid_value = 0;
+    RCLCPP_INFO(this->get_logger(), "Submitting bid for task %ld of %ld", msg->id, bid.bid_value);
     bidPublisher->publish(bid);
 }
