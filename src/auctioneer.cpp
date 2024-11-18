@@ -4,7 +4,7 @@
 
 Auctioneer::Auctioneer() : Node("auctioneer")
 {
-    numberOfClients = 1; // TODO: Add a service for clients to "register"
+    numberOfClients = 2; // TODO: Add a service for clients to "register"
     auctionPublisher = this->create_publisher<task_auction::msg::Task>(Topics::auctions, 10);
     winningBidPublisher = this->create_publisher<task_auction::msg::Bid>(Topics::auctionWinner, 10);
 
