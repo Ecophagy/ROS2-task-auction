@@ -1,6 +1,6 @@
 #include "auction.hpp"
 
-Auction::Auction(int taskId) : taskId(taskId)
+Auction::Auction(int taskId, rclcpp::Time auctionStartTime) : taskId(taskId), auctionStartTime(auctionStartTime)
 {
     bids = {};
 }
@@ -18,7 +18,7 @@ int Auction::getNumberOfBids()
 task_auction::msg::Bid Auction::getWinningBid()
 {
     // The lowest bid is the winner
-    auto bestBid = bids.front();
+    auto bestBid = bids.front(); // FIXME: Undefined behaviour on empty vector
     for (const auto &bid : bids)
     {
         if (bid.bid_value < bestBid.bid_value)
@@ -27,4 +27,9 @@ task_auction::msg::Bid Auction::getWinningBid()
         }
     }
     return bestBid;
+}
+
+bool Auction::auctionExpired(const rclcpp::Time now)
+{
+    return now >= auctionStartTime + auctionDuration;
 }
