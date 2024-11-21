@@ -1,6 +1,7 @@
 #include "auctioneer.hpp"
 #include "constants.hpp"
 #include <functional>
+#include <stdexcept>
 
 Auctioneer::Auctioneer() : Node("auctioneer")
 {
@@ -58,10 +59,19 @@ void Auctioneer::AuctionTimeoutCallback()
         if (auctionIterator->second.auctionExpired(now))
         {
             RCLCPP_INFO(this->get_logger(), "Auction for task %d expired", auctionIterator->first);
-            auto winningBid = auctionIterator->second.getWinningBid();
-            RCLCPP_INFO(this->get_logger(), "Winning bid for task %d is %ld by robot #%ld", auctionIterator->first, winningBid.bid_value, winningBid.robot_id);
-            winningBidPublisher->publish(winningBid); // TODO: This should be a service not a topic
+            try
+            {
+                auto winningBid = auctionIterator->second.getWinningBid();
+                RCLCPP_INFO(this->get_logger(), "Winning bid for task %d is %ld by robot #%ld", auctionIterator->first, winningBid.bid_value, winningBid.robot_id);
+                winningBidPublisher->publish(winningBid); // TODO: This should probably be a service not a topic
+            }
+            catch (const std::length_error& e)
+            {
+                RCLCPP_WARN(this->get_logger(), "No bids received for task %d. Closing auction", auctionIterator->first);
+                // TODO: Report this to the task manager, as it needs to decide what to do
+            }
             auctionIterator = auctions.erase(auctionIterator++);
+
         }
         else
         {
